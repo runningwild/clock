@@ -23,8 +23,8 @@ func (f *FakeTimeObj) GetCurrentTime() int64 {
 }
 
 func (f *FakeTimeObj) inc(d int64) {
-	atomic.AddInt64(&f.CurrentTime, d)
-	for f.Events.Len() > 0 && f.Events[0].time <= f.CurrentTime {
+	currentTime := atomic.AddInt64(&f.CurrentTime, d)
+	for f.Events.Len() > 0 && f.Events[0].time <= currentTime {
 		event := f.Events.Pop()
 		event.mutex.Unlock()
 	}
